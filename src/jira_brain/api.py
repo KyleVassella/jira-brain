@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from anthropic import Anthropic
 from dotenv import load_dotenv
+from jira_brain.rag import answer
 
 load_dotenv()
 client = Anthropic()
@@ -15,9 +16,4 @@ class AskResponse(BaseModel):
 
 @app.post("/ask", response_model=AskResponse)
 def ask(req: AskRequest):
-    resp = client.messages.create(
-        model="claude-sonnet-4-6",
-        max_tokens=300,
-        messages=[{"role": "user", "content": req.question}],
-    )
-    return AskResponse(answer=resp.content[0].text)
+    return AskResponse(answer=answer(req.question))
