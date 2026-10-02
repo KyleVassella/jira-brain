@@ -1,0 +1,14 @@
+[
+  {"question": "Why does login break on Safari?", "expected_sources": ["PROJ-101"], "expected_keywords": ["SameSite"]},
+  {"question": "What was fixed in release 2.3.1?", "expected_sources": ["PROJ-105"], "expected_keywords": ["Safari", "chart"]},
+  {"question": "How do I turn on dark mode?", "expected_sources": ["PROJ-103"], "expected_keywords": ["Settings", "Appearance"]},
+  {"question": "Why does CSV export time out?", "expected_sources": ["PROJ-104"], "expected_keywords": ["30", "background"]},
+  {"question": "Why are search results stale after editing an issue?", "expected_sources": ["PROJ-106"], "expected_keywords": ["index"]},
+  {"question": "Is there Slack integration?", "expected_sources": ["PROJ-107"], "expected_keywords": ["To Do"]},
+  {"question": "What is the max attachment size?", "expected_sources": ["PROJ-108"], "expected_keywords": ["100"]},
+  {"question": "Does 2.4.0 need a database migration?", "expected_sources": ["PROJ-109"], "expected_keywords": ["user_preferences"]},
+  {"question": "What is the API rate limit?", "expected_sources": ["PROJ-110"], "expected_keywords": ["1,000", "429"]},
+  {"question": "What Node version does 2.3.1 run on?", "expected_sources": ["PROJ-105"], "expected_keywords": ["20"]},
+  {"question": "How do I roll back 2.3.1?", "expected_sources": ["PROJ-105"], "expected_keywords": ["2.3.0"]},
+  {"question": "How do I make pancakes?", "expected_sources": [], "expected_keywords": []}
+]
