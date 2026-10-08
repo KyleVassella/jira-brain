@@ -11,6 +11,7 @@ dependencies = [
     "anthropic>=1.8.0",
     "chromadb>=1.5.9",
     "fastapi>=0.141.1",
+    "langsmith>=0.14.3",
     "python-dotenv>=1.2.3",
     "uvicorn>=0.54.0",
 ]

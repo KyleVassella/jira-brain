@@ -1,13 +1,8 @@
 import chromadb
 from anthropic import Anthropic
 from dotenv import load_dotenv
+from langsmith import traceable
 from pydantic import BaseModel
-
-class RagAnswer(BaseModel):
-    answer: str
-    sources: list[str]
-    confidence: float
-
 
 load_dotenv()
 client = Anthropic()
@@ -15,6 +10,13 @@ db = chromadb.PersistentClient(path="chroma_db")
 collection = db.get_or_create_collection("tickets")
 
 
+class RagAnswer(BaseModel):
+    answer: str
+    sources: list[str]
+    confidence: float
+
+
+@traceable(run_type="retriever")
 def retrieve(question: str, k: int = 3) -> list[dict]:
     results = collection.query(query_texts=[question], n_results=k)
     return [
@@ -25,6 +27,19 @@ def retrieve(question: str, k: int = 3) -> list[dict]:
     ]
 
 
+@traceable(run_type="llm")
+def ask_claude(system: str, user: str) -> RagAnswer:
+    resp = client.messages.parse(
+        model="claude-sonnet-4-6",
+        max_tokens=400,
+        system=system,
+        messages=[{"role": "user", "content": user}],
+        output_format=RagAnswer,
+    )
+    return resp.parsed_output
+
+
+@traceable
 def answer(question: str) -> RagAnswer:
     tickets = retrieve(question)
     context = "\n\n".join(f"[{t['key']}]\n{t['text']}" for t in tickets)
@@ -37,14 +52,7 @@ def answer(question: str) -> RagAnswer:
     )
     user = f"Tickets:\n\n{context}\n\nQuestion: {question}"
 
-    resp = client.messages.parse(
-        model="claude-sonnet-4-6",
-        max_tokens=400,
-        system=system,
-        messages=[{"role": "user", "content": user}],
-        output_format=RagAnswer,
-    )
-    return resp.parsed_output
+    return ask_claude(system, user)
 
 
 if __name__ == "__main__":
